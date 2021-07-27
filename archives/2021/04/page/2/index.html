@@ -21,7 +21,7 @@
 
   <!-- 页面元数据 -->
   
-  <title>Tag: 特征自动生成 - 虽然没什么用但还是想记下来</title>
+  <title>Archive: 2021/4 - 虽然没什么用但还是想记下来</title>
   
 
   
@@ -56,7 +56,7 @@
 <body>
   
 
-<header id="l_header" class="l_header auto shadow blur show" style='opacity: 0' >
+<header id="l_header" class="l_header auto shadow blur " style='opacity: 0' >
   <div class='container'>
   <div id='wrapper'>
     <div class='nav-sub'>
@@ -307,7 +307,7 @@
     <div id="l_cover">
   
     
-        <div id="full" class='cover-wrapper  dock' style="display: none;">
+        <div id="half" class='cover-wrapper  dock' style="display: ;">
           
             <div class='cover-bg lazyload placeholder' data-bg="https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/033.jpg"></div>
           
@@ -375,18 +375,10 @@
       <div class='body-wrapper' id="pjax-container">
         
 
-
 <div class='l_main'>
-  
-    
-      
+	
+		
   <section class="post-list">
-    
-      
-        
-          
-        
-      
     
     
       
@@ -399,16 +391,21 @@
   
     
     <h2 class="article-title" >
-      <a href="/2021/02/21/%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E7%9A%84%E8%87%AA%E5%8A%A8%E7%89%B9%E5%BE%81%E7%94%9F%E6%88%90%E7%AE%97%E6%B3%95/">
-        恶意流量的自动特征生成算法
+      <a href="/2021/04/01/DVR%E7%99%BB%E9%99%86%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E/">
+        DVR登陆绕过漏洞
       </a>
     </h2>
   
   <div class='md'>
     
       
-        本文作者来自于：绿盟科技、清华大学、哈尔滨工业大学。本文发表于2020 IEEE 19th International Conference on Trust, Security and Privacy in Computing and Communications (TrustCom)，属于CCF- C类会议。
-一、背景及目的​    ML在检测攻击行为时，可能有如下问题：虚假报警率过高；...
+        漏洞信息CVE-2018-9995
+利用过程语句 curl &quot;http://&lt;dvr_host&gt;:&lt;port&gt;/device.rsp?opt=user&amp;cmd=list&quot; -H &quot;Cookie: uid=admin&quot;
+得到用户名和密码，登陆
+
+(视频加载太慢显示不出来)
+ezelf师傅的工具中，最重要语句如下：
+12fu...
       
     
   </div>
@@ -416,15 +413,15 @@
     <div class='meta-v3' line_style='solid'>
       <div>
         
-        <time>2021-02-21</time>
+        <time>2021-04-01</time>
         
           <span class="dot"></span>
-          <a class="category-link" href="/categories/paper%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">paper阅读笔记</a>
+          <a class="category-link" href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">漏洞复现</a>
         
       </div>
       
         <div>
-          <a class='readmore' href='/2021/02/21/%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E7%9A%84%E8%87%AA%E5%8A%A8%E7%89%B9%E5%BE%81%E7%94%9F%E6%88%90%E7%AE%97%E6%B3%95/'>
+          <a class='readmore' href='/2021/04/01/DVR%E7%99%BB%E9%99%86%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E/'>
             Read More
           </a>
         </div>
@@ -441,11 +438,25 @@
   </section>
   
     
-  
-
-
+      <br>
+      <div class="prev-next">
+        
+          <a class="prev" rel="prev" href="/archives/2021/04/">
+            <section class="post prev white-box shadow" >
+              <i class="fas fa-chevron-left" aria-hidden="true"></i>&nbsp;Previous&nbsp;
+            </section>
+          </a>
+        
+        <p class="current">
+          2 / 2
+        </p>
+        
+      </div>
     
   
+
+
+	
 </div>
 <aside class='l_side'>
   
@@ -614,7 +625,7 @@
 
   var l_header=document.getElementById("l_header");
   
-  l_header.classList.add("show");
+  l_header.classList.remove("show");
   
 </script>
 

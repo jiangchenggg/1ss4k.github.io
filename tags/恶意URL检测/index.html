@@ -21,7 +21,7 @@
 
   <!-- 页面元数据 -->
   
-  <title>Tag: 恶意URL检测 - 虽然没什么用但还是想记下来</title>
+  <title>Tag: 恶意url检测 - 虽然没什么用但还是想记下来</title>
   
 
   
@@ -399,17 +399,25 @@
   
     
     <h2 class="article-title" >
-      <a href="/2021/01/25/%E6%81%B6%E6%84%8FURL%E4%B8%89/">
-        恶意URL检测(三)深度学习
+      <a href="/2021/01/23/%E6%81%B6%E6%84%8FURL%E4%BA%8C/">
+        恶意URL检测(二)用户角度SVM
       </a>
     </h2>
   
   <div class='md'>
     
       
-        此文是关于两篇文章的总结
-一第一篇：https://www.fireeye.com/blog/threat-research/2021/01/training-transformers-for-cyber-security-tasks-malicious-url-prediction.html
-1、关于本文用到的Transformer模型，前置知识参考 https://zhuanlan.zh...
+        一、机器学习实现恶意URL检测文章3地址 https://coldwave96.github.io/2019/11/08/MaliciousURLs/
+1、处理数据
+POST请求，URL要加上请求的主体内容。
+2、改进点
+
+细分攻击类型
+优化TF-IDF，如考虑词袋+TF-IDF，或利用TF- IDF将URL中不重要的部分进行泛化处理。
+使用深度学习
+
+3、词袋+TF-IDF+cnn
+文章3...
       
     
   </div>
@@ -417,7 +425,7 @@
     <div class='meta-v3' line_style='solid'>
       <div>
         
-        <time>2021-01-25</time>
+        <time>2021-01-23</time>
         
           <span class="dot"></span>
           <a class="category-link" href="/categories/web/">web</a>
@@ -425,7 +433,7 @@
       </div>
       
         <div>
-          <a class='readmore' href='/2021/01/25/%E6%81%B6%E6%84%8FURL%E4%B8%89/'>
+          <a class='readmore' href='/2021/01/23/%E6%81%B6%E6%84%8FURL%E4%BA%8C/'>
             Read More
           </a>
         </div>
@@ -559,12 +567,12 @@
           <li><a class="flat-box"
             title="/categories/%E6%9D%82%E8%AE%B0/" href="/categories/%E6%9D%82%E8%AE%B0/"
             id="categoriesE69D82E8AEB0"
-            ><div class='name'>杂记</div><div class='badge'>(6)</div></a></li>
+            ><div class='name'>杂记</div><div class='badge'>(7)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"
             id="categoriesE6BC8FE6B49EE5A48DE78EB0"
-            ><div class='name'>漏洞复现</div><div class='badge'>(5)</div></a></li>
+            ><div class='name'>漏洞复现</div><div class='badge'>(6)</div></a></li>
         
       </ul>
     </div>
@@ -1394,14 +1402,6 @@ document.addEventListener("pjax:success", listennSidebarTOC);
 
     document.addEventListener('pjax:error', function (e) {
 	  
-      window.location.href = e.triggerElement.href;
-    });
-</script>
-
-    
-  </div>
-</body>
-</html>
       window.location.href = e.triggerElement.href;
     });
 </script>

@@ -478,7 +478,31 @@
 <p>良性：Alexa，恶意：phishtank。但是本文所用的数据集较少。</p>
 <p>6、结果</p>
 <p>准确度达到98%以上。</p>
-<p>看到一篇文章，链接如下：<a target="_blank" rel="noopener" href="http://www.c-s-a.org.cn/csa/article/pdf/7461%E3%80%822019%E5%B9%B412%E6%9C%88%E6%94%B6%E7%A8%BF%EF%BC%8C2020%E5%B9%B410%E6%9C%88%E5%87%BA%E7%89%88%E3%80%82">http://www.c-s-a.org.cn/csa/article/pdf/7461。2019年12月收稿，2020年10月出版。</a></p>
+<h2 id="三十五、基于PU-Learning的恶意URL检测"><a href="#三十五、基于PU-Learning的恶意URL检测" class="headerlink" title="三十五、基于PU-Learning的恶意URL检测"></a>三十五、基于PU-Learning的恶意URL检测</h2><p>看的是先知社区上的翻译版本 <a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/2190%EF%BC%8C2017%E5%B9%B4%E5%8D%97%E4%BA%AC%E5%A4%A7%E5%AD%A6%E5%8F%91%E8%A1%A8%E4%BA%8ECCS%E3%80%82">https://xz.aliyun.com/t/2190，2017年南京大学发表于CCS。</a></p>
+<p>1、PU- learning：可以充分利用恶意URL以及未标记的URL。本文使用到的策略有：two-stage strategy、cost-sensitive strategy。</p>
+<p>2、所针对的攻击是对#fragment的攻击。原文如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">具体而言，fragment通常是形如“key1 = value1&amp;…&amp;keyn = valuen”的形式，攻击者可以通过任意修改value部分以发起攻击。因此，我们的系统主要处理这个部分，而特征提取过程直接从fragment的Key-Value对中提取特征。</span><br></pre></td></tr></table></figure>
+
+
+
+<p>3、特征提取</p>
+<p>​    URL分成各个部分片段 / 从fragment中提取 key-value对 / 设定一下 key-value对的数目的最大值，设定为N+1。实验时N被设为99. / 提取字符的数目、数字的数目、标点符号的数目，以及出现的不同的字符的数目、不同的字母的数目以及不同的标点符号的数目，共8个。</p>
+<p>​    最后每个URL都可以被描述为(N+1)*8维度的特征向量。</p>
+<p>4、模型训练：PU- learning</p>
+<ul>
+<li>two stage strategy：从未标记的数据中选择可靠的负样本，即恶意URL。选择算法如下：</li>
+</ul>
+<p><img src="/2021/05/25/%E6%81%B6%E6%84%8FURL%E5%8D%81/my/Documents/blog/source/_posts/%E6%81%B6%E6%84%8FURL%E5%8D%81/1select_negtive.png" class="lazyload" data-srcset="/2021/05/25/%E6%81%B6%E6%84%8FURL%E5%8D%81/my/Documents/blog/source/_posts/%E6%81%B6%E6%84%8FURL%E5%8D%81/1select_negtive.png" srcset="data:image/png;base64,666" alt="1select_negtive"></p>
+<p>随后进行传统的有监督的学习。模型采用logistic回归。</p>
+<ul>
+<li>cost-sensitive strategy：假设在未标注样本中只有少量正例。</li>
+</ul>
+<p>将所有未标注的样本设定为负例，随后最小化目标函数。</p>
+<p>5、预测</p>
+<p>实验的结果需要专家来人工进行评价。准确度约90%。</p>
+<p>6、数据集</p>
+<p>来自于发送至蚂蚁金服的URL请求的采样。</p>
+<h2 id="三十六、"><a href="#三十六、" class="headerlink" title="三十六、"></a>三十六、</h2><p>看到一篇文章，链接如下：<a target="_blank" rel="noopener" href="http://www.c-s-a.org.cn/csa/article/pdf/7461%E3%80%822019%E5%B9%B412%E6%9C%88%E6%94%B6%E7%A8%BF%EF%BC%8C2020%E5%B9%B410%E6%9C%88%E5%87%BA%E7%89%88%E3%80%82">http://www.c-s-a.org.cn/csa/article/pdf/7461。2019年12月收稿，2020年10月出版。</a></p>
 <h2 id="三十二、URLNet-深度学习"><a href="#三十二、URLNet-深度学习" class="headerlink" title="三十二、URLNet+深度学习"></a>三十二、URLNet+深度学习</h2><p>1、挂在arXiv上，作者来自新加坡管理大学</p>
 <p>2、使用模型：CNN</p>
 <p>收获：</p>
@@ -518,10 +542,10 @@
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-05-28T18:30:57+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-07-05T12:09:00+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：May 28, 2021</p>
+    <p>更新于：Jul 5, 2021</p>
   </a>
 </div>
 
@@ -651,7 +675,7 @@
 
 
     <div class='content'>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E5%8D%81%E4%BA%8C%E3%80%81DeepPhish-Simulating-malicious-AI-%E4%BB%8E%E6%94%BB%E5%87%BB%E8%80%85%E7%9A%84%E8%A7%92%E5%BA%A6%E4%BD%BF%E7%94%A8AI%E4%BA%A7%E7%94%9F%E9%92%93%E9%B1%BCURL"><span class="toc-text">三十二、DeepPhish: Simulating malicious AI 从攻击者的角度使用AI产生钓鱼URL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E5%8D%81%E4%B8%89%E3%80%81%E9%92%93%E9%B1%BC%E6%94%BB%E5%87%BB%E7%9A%84%E6%A3%80%E6%B5%8B%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6"><span class="toc-text">三十三、钓鱼攻击的检测处理框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E5%8D%81%E5%9B%9B%E3%80%81kn0w-thy-doma1n-name%E2%80%9D-%E4%BD%BF%E7%94%A8%E5%9F%9F%E5%90%8D%E7%89%B9%E5%BE%81%E7%9A%84%E9%92%93%E9%B1%BC%E6%A3%80%E6%B5%8B"><span class="toc-text">三十四、kn0w thy doma1n name”:使用域名特征的钓鱼检测</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E5%8D%81%E4%BA%8C%E3%80%81URLNet-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0"><span class="toc-text">三十二、URLNet+深度学习</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E5%8D%81%E4%BA%8C%E3%80%81DeepPhish-Simulating-malicious-AI-%E4%BB%8E%E6%94%BB%E5%87%BB%E8%80%85%E7%9A%84%E8%A7%92%E5%BA%A6%E4%BD%BF%E7%94%A8AI%E4%BA%A7%E7%94%9F%E9%92%93%E9%B1%BCURL"><span class="toc-text">三十二、DeepPhish: Simulating malicious AI 从攻击者的角度使用AI产生钓鱼URL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E5%8D%81%E4%B8%89%E3%80%81%E9%92%93%E9%B1%BC%E6%94%BB%E5%87%BB%E7%9A%84%E6%A3%80%E6%B5%8B%E5%A4%84%E7%90%86%E6%A1%86%E6%9E%B6"><span class="toc-text">三十三、钓鱼攻击的检测处理框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E5%8D%81%E5%9B%9B%E3%80%81kn0w-thy-doma1n-name%E2%80%9D-%E4%BD%BF%E7%94%A8%E5%9F%9F%E5%90%8D%E7%89%B9%E5%BE%81%E7%9A%84%E9%92%93%E9%B1%BC%E6%A3%80%E6%B5%8B"><span class="toc-text">三十四、kn0w thy doma1n name”:使用域名特征的钓鱼检测</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E5%8D%81%E4%BA%94%E3%80%81%E5%9F%BA%E4%BA%8EPU-Learning%E7%9A%84%E6%81%B6%E6%84%8FURL%E6%A3%80%E6%B5%8B"><span class="toc-text">三十五、基于PU-Learning的恶意URL检测</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E5%8D%81%E5%85%AD%E3%80%81"><span class="toc-text">三十六、</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E5%8D%81%E4%BA%8C%E3%80%81URLNet-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0"><span class="toc-text">三十二、URLNet+深度学习</span></a></li></ol>
     </div>
   </section>
 
